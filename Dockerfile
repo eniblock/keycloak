@@ -28,6 +28,7 @@ ENV SMTP_FROM=noreply@theblockchainxdev.com \
   SMTP_PASSWORD=
 
 ENV KEYCLOAK_EXTRA_ARGS="-Dkeycloak.migration.action=import -Dkeycloak.migration.provider=dir -Dkeycloak.migration.dir=/tmp/realm-config -Dkeycloak.migration.strategy=IGNORE_EXISTING"
+ENV REALM=main
 
 CMD ["/scripts/bootstrap.sh", \
      "/opt/bitnami/scripts/keycloak/run.sh"]
