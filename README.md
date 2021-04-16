@@ -25,5 +25,8 @@ image:
 make sure the pull secret is configured with a gitlab access token with the `read_registry` scope
 
 ~~~bash
-kubectl create secret docker-registry gitlab-registry --docker-server=registry.gitlab.com --docker-username=your_user --docker-password=your_token
+kubectl create secret docker-registry gitlab-registry \
+  --docker-server=registry.gitlab.com \
+  --docker-username=your_user \
+  --docker-password=your_token
 ~~~
