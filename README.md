@@ -1,3 +1,5 @@
+[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=the-blockchain-xdev_keycloak)  [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=the-blockchain-xdev_keycloak&metric=reliability_rating&token=de383d64f8731f96177a65b5f1e8e42bfcabc947)](https://sonarcloud.io/dashboard?id=the-blockchain-xdev_keycloak)
+
 Xdev's customized keycloak image to use with bitnami's helm chart
 
 ## Usage
