@@ -17,6 +17,8 @@
 
     <properties>
         <version.keycloak>11.0.3</version.keycloak>
+        <sonar.projectKey>the-blockchain-xdev_keycloak</sonar.projectKey>
+        <sonar.organization>bxdev</sonar.organization>
     </properties>
 
     <dependencyManagement>
