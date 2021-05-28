@@ -6,4 +6,4 @@ helm_remote('keycloak',
     version="2.4.3",
     values=["values.yaml"],
 )
-k8s_resource('keycloak', port_forwards=['9080:80', '9443:443'])
+k8s_resource('keycloak', port_forwards=['9080:8080', '9443:8443'])
