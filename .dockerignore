@@ -1,0 +1,7 @@
+.helm
+READMED.md
+values.yaml
+.gitlab-ci.yaml
+.gitignore
+.history
+tilt_modules
