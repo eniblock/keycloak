@@ -1,9 +1,20 @@
 package xdev.keycloak.api.representation;
 
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.UriInfo;
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class UserSearchCriteria {
+
+	// Used to filter on attributes
+	@Context
+	UriInfo uriInfo;
 
 	@QueryParam("search")
 	private String search;
@@ -13,9 +24,6 @@ public class UserSearchCriteria {
 	private List<String> roles;
 	@QueryParam("accountId")
 	private Long accountId;
-	// Each element must match the pattern "name:value"
-	@QueryParam("attributes")
-	private List<String> attributes;
 
 	// Pagination
 	@QueryParam("paged")
@@ -65,12 +73,12 @@ public class UserSearchCriteria {
 		this.accountId = accountId;
 	}
 
-	public List<String> getAttributes() {
-		return attributes;
+	public UriInfo getUriInfo() {
+		return uriInfo;
 	}
 
-	public void setAttributes(List<String> attributes) {
-		this.attributes = attributes;
+	public void setUriInfo(UriInfo uriInfo) {
+		this.uriInfo = uriInfo;
 	}
 
 	public boolean isPaged() {
@@ -119,5 +127,15 @@ public class UserSearchCriteria {
 
 	public void setSort(List<String> sort) {
 		this.sort = sort;
+	}
+
+	public Map<String, String> getAttributes() {
+		MultivaluedMap<String, String> queryParams = this.getUriInfo().getQueryParameters();
+		List<String> fields = Arrays.stream(this.getClass().getDeclaredFields())
+				.map(Field::getName)
+				.collect(Collectors.toList());
+		return queryParams.entrySet().stream()
+				.filter(param -> !fields.contains(param.getKey()))
+				.collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().get(0)));
 	}
 }

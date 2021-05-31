@@ -2,6 +2,7 @@ package xdev.keycloak.api.resource;
 
 import net.bytebuddy.implementation.bind.MethodDelegationBinder;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.annotations.cache.NoCache;
@@ -24,6 +25,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -36,6 +38,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -204,14 +207,18 @@ public class UserResource extends AbstractAdminResource<AdminAuth> {
         }
 
         // Filter on attributes
-        if (CollectionUtils.isNotEmpty(criteria.getAttributes())) {
-            // We must join manually UserAttributeEntity. It creates a cross join unfortunately
-            criteria.getAttributes().forEach(attribute -> {
-                String[] attributeKV = attribute.split(":");
-                Root<UserAttributeEntity> attributeRoot = criteriaQuery.from(UserAttributeEntity.class);
-                predicates.add(builder.equal(attributeRoot.get("user").get("id"), userRoot.get("id")));
-                predicates.add(builder.equal(attributeRoot.get("name"), attributeKV[0]));
-                predicates.add(builder.equal(attributeRoot.get("value"), attributeKV[1]));
+        Map<String, String> attributes = criteria.getAttributes();
+        if (MapUtils.isNotEmpty(attributes)) {
+            LOG.info("Filtering on attributes [" + StringUtils.join(attributes.keySet(), ",") + "]");
+            attributes.forEach((attribute, value) -> {
+                Subquery<UserAttributeEntity> attributeSubquery = criteriaQuery.subquery(UserAttributeEntity.class);
+                Root<UserAttributeEntity> attributeRoot = attributeSubquery.from(UserAttributeEntity.class);
+                attributeSubquery = attributeSubquery.select(attributeRoot.get("user").get("id"))
+                        .where(builder.and(
+                                builder.equal(attributeRoot.get("name"), attribute),
+                                builder.equal(attributeRoot.get("value"), value)
+                        ));
+                predicates.add(userRoot.get("id").in(attributeSubquery));
             });
         }
 
