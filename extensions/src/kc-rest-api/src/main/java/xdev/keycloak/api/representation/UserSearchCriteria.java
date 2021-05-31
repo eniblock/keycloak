@@ -1,8 +1,7 @@
 package xdev.keycloak.api.representation;
 
-import java.util.List;
-
 import javax.ws.rs.QueryParam;
+import java.util.List;
 
 public class UserSearchCriteria {
 
@@ -14,6 +13,9 @@ public class UserSearchCriteria {
 	private List<String> roles;
 	@QueryParam("accountId")
 	private Long accountId;
+	// Each element must match the pattern "name:value"
+	@QueryParam("attributes")
+	private List<String> attributes;
 
 	// Pagination
 	@QueryParam("paged")
@@ -61,6 +63,14 @@ public class UserSearchCriteria {
 
 	public void setAccountId(Long accountId) {
 		this.accountId = accountId;
+	}
+
+	public List<String> getAttributes() {
+		return attributes;
+	}
+
+	public void setAttributes(List<String> attributes) {
+		this.attributes = attributes;
 	}
 
 	public boolean isPaged() {

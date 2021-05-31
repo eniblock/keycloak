@@ -1,5 +1,6 @@
 package xdev.keycloak.api.representation;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -14,6 +15,7 @@ public class UserRepresentation {
     private Long createdTimestamp;
     private Set<RoleRepresentation> roles;
     protected Boolean enabled;
+    private Set<AttributeRepresentation> attributes;
 
     public UUID getId() {
         return id;
@@ -77,6 +79,14 @@ public class UserRepresentation {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public Set<AttributeRepresentation> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Set<AttributeRepresentation> attributes) {
+        this.attributes = attributes;
     }
 
     @Override
