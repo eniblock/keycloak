@@ -1,10 +1,21 @@
 package xdev.keycloak.api.resource;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import net.bytebuddy.implementation.bind.MethodDelegationBinder;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.jboss.logging.Logger;
+import org.jboss.resteasy.annotations.cache.NoCache;
+import org.keycloak.models.KeycloakSession;
+import org.keycloak.models.RealmModel;
+import org.keycloak.models.jpa.entities.RoleEntity;
+import org.keycloak.models.jpa.entities.UserAttributeEntity;
+import org.keycloak.models.jpa.entities.UserEntity;
+import org.keycloak.models.jpa.entities.UserRoleMappingEntity;
+import xdev.keycloak.api.representation.AttributeRepresentation;
+import xdev.keycloak.api.representation.RoleRepresentation;
+import xdev.keycloak.api.representation.UserRepresentation;
+import xdev.keycloak.api.representation.UserSearchCriteria;
+import xdev.keycloak.api.representation.UserSearchResponse;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -22,18 +33,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.jboss.logging.Logger;
-import org.jboss.resteasy.annotations.cache.NoCache;
-import org.keycloak.models.KeycloakSession;
-import org.keycloak.models.RealmModel;
-import org.keycloak.models.jpa.entities.*;
-import xdev.keycloak.api.representation.RoleRepresentation;
-import xdev.keycloak.api.representation.UserRepresentation;
-import xdev.keycloak.api.representation.UserSearchCriteria;
-import xdev.keycloak.api.representation.UserSearchResponse;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 public class UserResource extends AbstractAdminResource<AdminAuth> {
 
@@ -56,7 +60,8 @@ public class UserResource extends AbstractAdminResource<AdminAuth> {
     public UserRepresentation get(final @PathParam("id") String id) {
         UserEntity user = find(id);
         List<RoleEntity> roles = findRoles(user.getId());
-        return toRepresentation(user, roles);
+        List<UserAttributeEntity> attributes = findAttributes(user.getId());
+        return toRepresentation(user, roles, attributes);
     }
 
     @GET
@@ -71,14 +76,16 @@ public class UserResource extends AbstractAdminResource<AdminAuth> {
         if (CollectionUtils.isNotEmpty(users)) {
             users.forEach(userEntity -> {
                 List<RoleEntity> roles = findRoles(userEntity.getId());
-                usersRep.add(toRepresentation(userEntity, roles));
+                List<UserAttributeEntity> attributes = findAttributes(userEntity.getId());
+                usersRep.add(toRepresentation(userEntity, roles, attributes));
             });
         }
 
         return new UserSearchResponse(usersRep, count);
     }
 
-    private UserRepresentation toRepresentation(UserEntity entity, List<RoleEntity> roles) {
+    private UserRepresentation toRepresentation(UserEntity entity, List<RoleEntity> roles,
+                                                List<UserAttributeEntity> attributes) {
 
         final UserRepresentation rep = new UserRepresentation();
 
@@ -104,16 +111,27 @@ public class UserResource extends AbstractAdminResource<AdminAuth> {
             rep.setRoles(rolesRep);
         }
 
+        if (CollectionUtils.isNotEmpty(attributes)) {
+            rep.setAttributes(new HashSet<>());
+            attributes.stream()
+                    .map(userAttributeEntity -> {
+                        AttributeRepresentation attributeRep = new AttributeRepresentation();
+                        attributeRep.setName(userAttributeEntity.getName());
+                        attributeRep.setValue(userAttributeEntity.getValue());
+                        return attributeRep;
+                    })
+                    .forEach(attributeRepresentation -> rep.getAttributes().add(attributeRepresentation));
+        }
+
         return rep;
     }
 
     private UserEntity find(String id) {
         try {
-            UserEntity user = em.createQuery("SELECT u FROM UserEntity u WHERE u.realmId = :realmId AND u.id = :id", UserEntity.class)
+            return em.createQuery("SELECT u FROM UserEntity u WHERE u.realmId = :realmId AND u.id = :id", UserEntity.class)
                     .setParameter("realmId", realm.getId())
                     .setParameter("id", id)
                     .getSingleResult();
-            return user;
         } catch (NoResultException e) {
             throw new NotFoundException("User not found");
         }
@@ -164,6 +182,9 @@ public class UserResource extends AbstractAdminResource<AdminAuth> {
     private List<Predicate> getPredicates(Root<UserEntity> userRoot, CriteriaQuery<?> criteriaQuery, CriteriaBuilder builder, UserSearchCriteria criteria) {
 
         List<Predicate> predicates = new ArrayList<>();
+
+        predicates.add(builder.isNull(userRoot.get("serviceAccountClientLink")));
+
         // We MUST filter on the realm to be sure we don't retrieve other users from other realms
         predicates.add(builder.equal(userRoot.get("realmId"), realm.getId()));
 
@@ -180,6 +201,18 @@ public class UserResource extends AbstractAdminResource<AdminAuth> {
                     builder.like(builder.lower(userRoot.get("lastName")), searchPattern),
                     builder.like(builder.lower(userRoot.get("email")), searchPattern))
             );
+        }
+
+        // Filter on attributes
+        if (CollectionUtils.isNotEmpty(criteria.getAttributes())) {
+            // We must join manually UserAttributeEntity. It creates a cross join unfortunately
+            criteria.getAttributes().forEach(attribute -> {
+                String[] attributeKV = attribute.split(":");
+                Root<UserAttributeEntity> attributeRoot = criteriaQuery.from(UserAttributeEntity.class);
+                predicates.add(builder.equal(attributeRoot.get("user").get("id"), userRoot.get("id")));
+                predicates.add(builder.equal(attributeRoot.get("name"), attributeKV[0]));
+                predicates.add(builder.equal(attributeRoot.get("value"), attributeKV[1]));
+            });
         }
 
         // Filter on role names
@@ -210,8 +243,18 @@ public class UserResource extends AbstractAdminResource<AdminAuth> {
                     .setParameter("attributeName", System.getenv("ROLE_ATTRIBUTE_KEY"))
                     .setParameter("attributeValue", System.getenv("ROLE_ATTRIBUTE_VALUE"))
                     .getResultList();
-
             return result;
+        } catch (NoResultException e) {
+            return null;
+        }
+
+    }
+
+    private List<UserAttributeEntity> findAttributes(String userId) {
+        try {
+            return em.createQuery("SELECT ua FROM UserAttributeEntity ua WHERE ua.user.id = :userId", UserAttributeEntity.class)
+                    .setParameter("userId", userId)
+                    .getResultList();
         } catch (NoResultException e) {
             return null;
         }

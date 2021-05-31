@@ -1,13 +1,5 @@
 package xdev.keycloak.api.resource;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import javax.ws.rs.NotAuthorizedException;
-import javax.ws.rs.NotFoundException;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
 import org.jboss.logging.Logger;
 import org.keycloak.Config;
 import org.keycloak.common.ClientConnection;
@@ -23,6 +15,15 @@ import org.keycloak.services.managers.AuthenticationManager;
 import org.keycloak.services.managers.RealmManager;
 import org.keycloak.services.resources.admin.AdminAuth;
 import org.keycloak.services.resources.admin.AdminEventBuilder;
+
+import javax.ws.rs.NotAuthorizedException;
+import javax.ws.rs.NotFoundException;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 public abstract class AbstractAdminResource<T extends AdminAuth> {
 
@@ -52,8 +53,7 @@ public abstract class AbstractAdminResource<T extends AdminAuth> {
 
     private void setupAuth() {
 
-        AppAuthManager authManager = new AppAuthManager();
-        String tokenString = authManager.extractAuthorizationHeaderToken(headers);
+        String tokenString = AppAuthManager.extractAuthorizationHeaderToken(headers);
 
         if (tokenString == null) {
             throw new NotAuthorizedException("Bearer");
@@ -76,7 +76,10 @@ public abstract class AbstractAdminResource<T extends AdminAuth> {
             throw new NotAuthorizedException("Unknown realm in token");
         }
         session.getContext().setRealm(realm);
-        AuthenticationManager.AuthResult authResult = authManager.authenticateBearerToken(session, realm, session.getContext().getUri(), clientConnection, headers);
+
+        AppAuthManager.BearerTokenAuthenticator bearerTokenAuthenticator =
+                new AppAuthManager.BearerTokenAuthenticator(session);
+        AuthenticationManager.AuthResult authResult = bearerTokenAuthenticator.authenticate();
         if (authResult == null) {
             throw new NotAuthorizedException("Bearer");
         }
