@@ -27,14 +27,7 @@ docker-image:
     name: tbxdev/build-docker
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - buildctl-daemonless.sh build
-      --frontend dockerfile.v0
-      --local context=.
-      --local dockerfile=.
-      --secret id=gitlabToken,env=CI_JOB_TOKEN
-      --export-cache mode=max,type=registry,ref=$CI_REGISTRY_IMAGE/keycloak:buildcache,push=true
-      --import-cache type=registry,ref=$CI_REGISTRY_IMAGE/keycloak:buildcache
-      --output type=image,name=$CI_REGISTRY_IMAGE/keycloak:$CI_COMMIT_REF_SLUG,push=true
+    - build_with_pipeline_id $CI_REGISTRY_IMAGE
 
 k8s:
   stage: test
@@ -61,7 +54,7 @@ k8s:
       --timeout 10m
       --wait || (kubectl describe pod && false)
     - helm list
-    
+
 sonarcloud-check:
   image: maven:3.6.3-jdk-11
   variables:
