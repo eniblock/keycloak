@@ -32,3 +32,19 @@ kubectl create secret docker-registry gitlab-registry \
   --docker-username=your_user \
   --docker-password=your_token
 ~~~
+
+## Export realm configuration
+
+Set the environment variable `EXPORT_REALM` to `true` on the keycloak pod:
+
+~~~yaml
+extraEnvVars:
+  - name: EXPORT_REALM
+    value: "true"
+~~~
+
+The export is available in `/tmp/realm-export` in the keycloak pod. The content can be retrieved with
+
+~~~bash
+kubectl exec keycloack-0 -- tar cv /tmp/realm-export > /tmp/realm-export.tgz
+~~~
