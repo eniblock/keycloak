@@ -8,6 +8,7 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class UserSearchCriteria {
@@ -132,7 +133,9 @@ public class UserSearchCriteria {
 	public Map<String, String> getAttributes() {
 		MultivaluedMap<String, String> queryParams = this.getUriInfo().getQueryParameters();
 		List<String> fields = Arrays.stream(this.getClass().getDeclaredFields())
-				.map(Field::getName)
+				.map(f -> f.getAnnotation(QueryParam.class))
+				.filter(Objects::nonNull)
+				.map(QueryParam::value)
 				.collect(Collectors.toList());
 		return queryParams.entrySet().stream()
 				.filter(param -> !fields.contains(param.getKey()))
