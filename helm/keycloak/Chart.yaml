@@ -1,0 +1,30 @@
+annotations:
+  category: DeveloperTools
+apiVersion: v2
+appVersion: 12.0.4
+dependencies:
+- name: common
+  repository: https://charts.bitnami.com/bitnami
+  tags:
+  - bitnami-common
+  version: 1.4.2
+- condition: postgresql.enabled
+  name: postgresql
+  repository: https://charts.bitnami.com/bitnami
+  version: 10.3.15
+description: BXDev Keycloak is a high performance Java-based identity and access management
+  solution. It lets developers add an authentication layer to their applications with
+  minimum effort.
+home: https://www.keycloak.org
+icon: https://bitnami.com/assets/stacks/keycloak/img/keycloak-stack-220x234.png
+keywords:
+- keycloak
+- access-management
+maintainers:
+- email: it@theblockchainxdev.com
+  name: TheBlockchainXdev
+name: keycloak
+sources:
+- https://github.com/bitnami/bitnami-docker-keycloak
+- https://github.com/keycloak/keycloak
+version: 2.4.3
