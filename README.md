@@ -9,8 +9,8 @@ Add it as dependency in your `Chart.yml`
 ~~~yaml
 dependencies:
   - name: keycloak
-    version: "2.4.4"
-    repository: "https://charts.bitnami.com/bitnami"
+    version: "2.4.3"
+    repository: "oci://registry.gitlab.com/the-blockchain-xdev/xdev-product/enterprise-business-network/keycloak/helm"
 ~~~
 
 and configure it in `values.yaml` to get the image from this gitlab repository
