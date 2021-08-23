@@ -31,6 +31,7 @@ k8s:
     # Improve performance with overlayfs.
     DOCKER_DRIVER: overlay2
   script:
+    - while ! nc -z docker 2375; do sleep 1; done
     - k3d cluster create default --port 80:80@loadbalancer --port 443:443@loadbalancer
     - helm repo add bitnami https://charts.bitnami.com/bitnami
     - helm repo update
