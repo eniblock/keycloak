@@ -21,32 +21,32 @@ ci:
     changes:
       - ci/*
 
-k8s:
-  stage: test
-  image: $CI_REGISTRY_IMAGE/ci:$CI_COMMIT_REF_SLUG
-  services:
-    - docker:dind
-  variables:
-    DOCKER_HOST: "tcp://docker:2375"
-    # Improve performance with overlayfs.
-    DOCKER_DRIVER: overlay2
-  script:
-    - while ! nc -z docker 2375; do sleep 1; done
-    - k3d cluster create default --port 80:80@loadbalancer --port 443:443@loadbalancer
-    - helm repo add bitnami https://charts.bitnami.com/bitnami
-    - helm repo update
-    - kubectl create secret docker-registry gitlab-registry
-      --docker-server=$CI_REGISTRY
-      --docker-username=$CI_REGISTRY_USER
-      --docker-password=$CI_REGISTRY_PASSWORD
-    - helm install kc bitnami/keycloak
-      --set image.registry=$CI_REGISTRY
-      --set image.repository=$CI_PROJECT_PATH/keycloak
-      --set image.tag=$CI_COMMIT_REF_SLUG
-      --set image.pullSecrets={gitlab-registry}
-      --timeout 10m
-      --wait || (kubectl describe pod && false)
-    - helm list
+#k8s:
+#  stage: test
+#  image: $CI_REGISTRY_IMAGE/ci:$CI_COMMIT_REF_SLUG
+#  services:
+#    - docker:dind
+#  variables:
+#    DOCKER_HOST: "tcp://docker:2375"
+#    # Improve performance with overlayfs.
+#    DOCKER_DRIVER: overlay2
+#  script:
+#    - while ! nc -z docker 2375; do sleep 1; done
+#    - k3d cluster create default --port 80:80@loadbalancer --port 443:443@loadbalancer
+#    - helm repo add bitnami https://charts.bitnami.com/bitnami
+#    - helm repo update
+#    - kubectl create secret docker-registry gitlab-registry
+#      --docker-server=$CI_REGISTRY
+#      --docker-username=$CI_REGISTRY_USER
+#      --docker-password=$CI_REGISTRY_PASSWORD
+#    - helm install kc bitnami/keycloak
+#      --set image.registry=$CI_REGISTRY
+#      --set image.repository=$CI_PROJECT_PATH/keycloak
+#      --set image.tag=$CI_COMMIT_REF_SLUG
+#      --set image.pullSecrets={gitlab-registry}
+#      --timeout 10m
+#      --wait || (kubectl describe pod && false)
+#    - helm list
 
 sonarcloud-check:
   image: maven:3.6.3-jdk-11
