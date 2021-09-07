@@ -584,7 +584,7 @@ networkPolicy:
   ##         values:
   ##           - frontend
   ##
-  additionalRules: {}
+  additionalRules: []
 
 ## Specifies whether RBAC resources should be created
 ##
