@@ -2,7 +2,7 @@
 
 set -ex
 
-if [ "$EXPORT_REALM" == "true" ]; then
+if [[ "$EXPORT_REALM" == "true" ]]; then
   mkdir -p /tmp/realm-export
   export KEYCLOAK_EXTRA_ARGS="-Dkeycloak.migration.action=export -Dkeycloak.migration.provider=dir -Dkeycloak.migration.dir=/tmp/realm-export"
 else
