@@ -46,5 +46,5 @@ extraEnvVars:
 The export is available in `/tmp/realm-export` in the keycloak pod. The content can be retrieved with
 
 ~~~bash
-kubectl exec keycloak-0 -- tar cv /tmp/realm-export > /tmp/realm-export.tgz
+kubectl exec keycloak-0 -- tar cv /tmp/realm-export > /tmp/realm-export.tar
 ~~~
