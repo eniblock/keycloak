@@ -1,4 +1,14 @@
-[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=the-blockchain-xdev_keycloak)  [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=the-blockchain-xdev_keycloak&metric=reliability_rating&token=de383d64f8731f96177a65b5f1e8e42bfcabc947)](https://sonarcloud.io/dashboard?id=the-blockchain-xdev_keycloak)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=xdev-tech_keycloak&metric=bugs)](https://sonarcloud.io/dashboard?id=xdev-tech_keycloak)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=xdev-tech_keycloak&metric=code_smells)](https://sonarcloud.io/dashboard?id=xdev-tech_keycloak)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=xdev-tech_keycloak&metric=coverage)](https://sonarcloud.io/dashboard?id=xdev-tech_keycloak)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=xdev-tech_keycloak&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=xdev-tech_keycloak)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=xdev-tech_keycloak&metric=ncloc)](https://sonarcloud.io/dashboard?id=xdev-tech_keycloak)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=xdev-tech_keycloak&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=xdev-tech_keycloak)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=xdev-tech_keycloak&metric=alert_status)](https://sonarcloud.io/dashboard?id=xdev-tech_keycloak)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=xdev-tech_keycloak&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=xdev-tech_keycloak)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=xdev-tech_keycloak&metric=security_rating)](https://sonarcloud.io/dashboard?id=xdev-tech_keycloak)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=xdev-tech_keycloak&metric=sqale_index)](https://sonarcloud.io/dashboard?id=xdev-tech_keycloak)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=xdev-tech_keycloak&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=xdev-tech_keycloak)
 
 Xdev's customized keycloak image to use with bitnami's helm chart
 
@@ -10,7 +20,7 @@ Add it as dependency in your `Chart.yml`
 dependencies:
   - name: keycloak
     version: "2.4.3"
-    repository: "oci://registry.gitlab.com/the-blockchain-xdev/xdev-product/enterprise-business-network/keycloak/helm"
+    repository: "oci://xdev-tech/xdev-enterprise-business-network/keycloak/helm"
 ~~~
 
 and configure it in `values.yaml` to get the image from this gitlab repository
@@ -18,8 +28,8 @@ and configure it in `values.yaml` to get the image from this gitlab repository
 ~~~yaml
 image:
   registry: registry.gitlab.com
-  repository: the-blockchain-xdev/xdev-product/enterprise-business-network/keycloak/keycloak
-  tag: develop
+  repository: xdev-tech/xdev-enterprise-business-network/keycloak
+  tag: 0.2.0
   pullSecrets:
     - gitlab-registry
 ~~~
