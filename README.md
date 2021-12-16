@@ -19,14 +19,14 @@ Xdev's customized keycloak image to use with bitnami's helm chart
 For stable (tagged) versions:
 
 ```
-helm repo add hlf-k8s https://gitlab.com/api/v4/projects/30585617/packages/helm/dev
-helm search repo keycloak --devel
+helm repo add hlf-k8s https://gitlab.com/api/v4/projects/30585617/packages/helm/stable
+helm search repo keycloak
 ```
 
 For development versions:
 
 ```
-helm repo add hlf-k8s https://gitlab.com/api/v4/projects/30585617/packages/helm/stable
+helm repo add hlf-k8s https://gitlab.com/api/v4/projects/30585617/packages/helm/dev
 helm search repo keycloak --devel
 ```
 
@@ -60,6 +60,7 @@ kubectl create secret docker-registry gitlab-registry \
   --docker-username=your_user \
   --docker-password=your_token
 ~~~
+
 
 ## Export realm configuration
 
