@@ -94,4 +94,4 @@ publish_helm:
   script:
     - helm registry login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - helm dependency update ./helm/keycloak
-    - build_std $CI_REGISTRY_IMAGE/helm/keycloak ./helm/keycloak
+    - build_std ./helm/keycloak
