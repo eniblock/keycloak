@@ -69,6 +69,7 @@ helm-lint:
   image: registry.gitlab.com/xdev-tech/build/helm:2.1
   allow_failure: true
   script:
+    - helm dependency update ./helm/keycloak
     - lint helm/keycloak --values helm/keycloak/values-dev.yaml
 
 publish_docker:
