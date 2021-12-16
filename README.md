@@ -14,6 +14,24 @@ Xdev's customized keycloak image to use with bitnami's helm chart
 
 ## Usage
 
+### Standard
+
+For stable (tagged) versions:
+
+```
+helm repo add hlf-k8s https://gitlab.com/api/v4/projects/30585617/packages/helm/dev
+helm search repo keycloak --devel
+```
+
+For development versions:
+
+```
+helm repo add hlf-k8s https://gitlab.com/api/v4/projects/30585617/packages/helm/stable
+helm search repo keycloak --devel
+```
+
+### OCI
+
 Add it as dependency in your `Chart.yml`
 
 ~~~yaml
