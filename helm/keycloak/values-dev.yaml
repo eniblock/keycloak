@@ -5,9 +5,6 @@ image:
   pullSecrets:
     - gitlab-registry
 
-service:
-  type: NodePort
-
 commonAnnotations:
   reloader.stakater.com/auto: "true"
 
