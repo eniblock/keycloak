@@ -2,38 +2,25 @@
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: {{ template "keycloak.fullname" . }}
+  name: {{ include "keycloak.fullname" . }}
   namespace: {{ .Release.Namespace }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels:
+    {{- include "keycloak.labels" . | nindent 4 }}
     app.kubernetes.io/component: keycloak
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-  {{- end }}
 spec:
   podSelector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels:
+      {{- include "keycloak.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: keycloak
   ingress:
-    - ports:
-        - port: {{ .Values.containerPorts.http }}
-        {{- if .Values.auth.tls.enabled }}
-        - port: {{ .Values.containerPorts.https }}
-        {{- end }}
-        {{- if .Values.metrics.enabled }}
-        - port: 9990
-        {{- end }}
-      {{- if not .Values.networkPolicy.allowExternal }}
-      from:
+    - from:
         - podSelector:
             matchLabels:
-              {{ template "keycloak.fullname" . }}-client: "true"
+              {{ include "keycloak.fullname" . }}-client: "true"
+        # allow communication between the pods of this chart, when replicas is greater than 1
         - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
+            matchLabels:
+              {{- include "keycloak.selectorLabels" . | nindent 14 }}
               app.kubernetes.io/component: keycloak
-        {{- if .Values.networkPolicy.additionalRules }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.additionalRules "context" $) | nindent 8 }}
-        {{- end }}
-      {{- end }}
+        {{- .Values.ingress.from | toYaml | nindent 8 }}
 {{- end }}

@@ -1,29 +1,8 @@
-image:
-  registry: registry.gitlab.com
-  repository: the-blockchain-xdev/xdev-product/enterprise-business-network/keycloak/keycloak
-  tag: develop
-  pullSecrets:
-    - gitlab-registry
-
-commonAnnotations:
-  reloader.stakater.com/auto: "true"
-
-auth:
-  adminUser: kcadmin
-  adminPassword: kcadmin
-
-resources:
-  requests:
-    cpu: 50m
-    memory: 750Mi
-
-postgresql:
-  nameOverride: db
-  resources:
-    requests:
-      memory: 256Mi
-      cpu: 50m
-  rbac:
-    create: true
-  serviceAccount:
-    enabled: true
+ingress:
+  host: "kc.localhost"
+  enabled: true
+replicas: 1
+metrics:
+  enabled: true
+global:
+  dev: true

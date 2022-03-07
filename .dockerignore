@@ -6,3 +6,5 @@ values.yaml
 .history
 tilt_modules
 Tiltfile
+helm
+Dockerfile
