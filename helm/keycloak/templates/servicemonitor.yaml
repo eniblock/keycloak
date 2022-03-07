@@ -13,8 +13,8 @@ spec:
       {{- include "keycloak.selectorLabels" . | nindent 6 }}
       app.kubernetes.io/component: keycloak
   endpoints:
-    - port: metrics
-      path: /debug/metrics/prometheus
+    - port: http
+      path: /auth/metrics
       {{- if .Values.metrics.interval }}
       interval: {{ .Values.metrics.interval }}
       {{- end }}

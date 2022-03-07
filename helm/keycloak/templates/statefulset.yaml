@@ -31,7 +31,7 @@ spec:
             - /opt/keycloak/bin/kc.sh
           args:
             - start
-            - -Djgroups.dns.query=keycloak.{{ .Release.Namespace }}.svc.cluster.local
+            - -Djgroups.dns.query=keycloak-headless.{{ .Release.Namespace }}.svc.cluster.local
             - --proxy=edge
           env:
             {{- if .Values.ingress.host }}
