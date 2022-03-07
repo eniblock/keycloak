@@ -60,9 +60,15 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
-          # livenessProbe:
-          #   tcpSocket:
-          #     port: http
+          livenessProbe:
+            httpGet:
+              path: /auth/health
+              port: http
+          startupProbe:
+            httpGet:
+              path: /auth/health
+              port: http
+            failureThreshold: 6
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.affinity }}
