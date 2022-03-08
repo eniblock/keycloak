@@ -28,15 +28,17 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
-            - /opt/keycloak/bin/kc.sh
+            - dockerize
           args:
+            - -stdout=/tmp/configurator.out
+            - /opt/keycloak/bin/kc.sh
             - start
             - -Djgroups.dns.query=keycloak-headless.{{ .Release.Namespace }}.svc.cluster.local
             - --proxy=edge
           lifecycle:
             postStart:
               exec:
-                command: ["/tf/tf.sh"]
+                command: ["sh", "-c", "/tf/tf.sh 2>&1 > /tmp/configurator.out"]
           env:
             {{- if .Values.ingress.host }}
             - name: KC_HOSTNAME
