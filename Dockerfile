@@ -17,4 +17,5 @@ COPY --chown=keycloak configurator/*.tf /tf/
 RUN cd /tf \
   && terraform init --backend=false
 COPY --chown=keycloak configurator/*.sh /tf/
+COPY --chown=keycloak theme /opt/keycloak/themes/extra/
 COPY --from=builder /opt/keycloak/lib/quarkus/ /opt/keycloak/lib/quarkus/

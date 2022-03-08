@@ -10,10 +10,10 @@ terraform {
   }
 }
 variable "admin_username" {
-    type = string
+  type = string
 }
 variable "admin_password" {
-    type = string
+  type = string
 }
 provider "keycloak" {
   client_id = "admin-cli"

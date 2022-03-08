@@ -39,7 +39,7 @@ resource "keycloak_realm" "test" {
     }
   }
 
-  #   account_theme        = "base"
+  login_theme = "extra"
 
   internationalization {
     supported_locales = [
