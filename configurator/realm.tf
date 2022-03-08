@@ -21,7 +21,8 @@ variable "smtp_username" {
 }
 
 variable "smtp_password" {
-  default = ""
+  default   = ""
+  sensitive = true
 }
 
 resource "keycloak_realm" "test" {

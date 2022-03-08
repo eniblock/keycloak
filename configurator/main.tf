@@ -13,7 +13,8 @@ variable "admin_username" {
   type = string
 }
 variable "admin_password" {
-  type = string
+  type      = string
+  sensitive = true
 }
 provider "keycloak" {
   client_id = "admin-cli"
