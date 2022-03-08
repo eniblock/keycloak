@@ -33,6 +33,10 @@ spec:
             - start
             - -Djgroups.dns.query=keycloak-headless.{{ .Release.Namespace }}.svc.cluster.local
             - --proxy=edge
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/tf/tf.sh"]
           env:
             {{- if .Values.ingress.host }}
             - name: KC_HOSTNAME
@@ -56,6 +60,12 @@ spec:
               value: jdbc:postgresql://{{ include "keycloak.db.fullname" . }}:{{ .Values.db.primary.service.ports.postgresql }}/{{ .Values.db.auth.database }}
             - name: KC_DB_USERNAME
               value: {{ .Values.db.auth.username }}
+            - name: KC_DB_URL_HOST
+              value: {{ include "keycloak.db.fullname" . }}
+            - name: KC_DB_URL_PORT
+              value: {{ .Values.db.primary.service.ports.postgresql | quote }}
+            - name: KC_DB_URL_DATABASE
+              value: {{ .Values.db.auth.database }}
           ports:
             - name: http
               containerPort: 8080

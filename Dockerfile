@@ -1,3 +1,14 @@
+FROM golang:1.17-alpine as tf-builder
+RUN apk add git
+WORKDIR /app
+RUN git clone --single-branch --branch=v0.15 --depth=1 https://github.com/hashicorp/terraform.git .
+RUN go build -o /usr/bin/terraform-bundle ./tools/terraform-bundle
+WORKDIR /conf
+COPY configurator/bundle.hcl ./
+RUN terraform-bundle package -os=linux -arch=amd64 bundle.hcl \
+  && mkdir /bundle \
+  && unzip -d /bundle terraform_*.zip
+
 FROM quay.io/keycloak/keycloak:17.0.0 as builder
 RUN /opt/keycloak/bin/kc.sh build \
   --metrics-enabled=true \
@@ -8,5 +19,10 @@ RUN /opt/keycloak/bin/kc.sh build \
 FROM quay.io/keycloak/keycloak:17.0.0
 WORKDIR /opt/keycloak
 RUN keytool -genkeypair -storepass password -storetype PKCS12 -keyalg RSA -keysize 2048 -dname "CN=server" -alias server -ext "SAN:c=DNS:localhost,IP:127.0.0.1" -keystore conf/server.keystore
+COPY --from=tf-builder /bundle/* /usr/bin/
+COPY --chown=keycloak configurator/*.tf /tf/
+RUN cd /tf \
+  && terraform init --backend=false
+COPY --chown=keycloak configurator/*.sh /tf/
 COPY --from=builder /opt/keycloak/lib/quarkus/ /opt/keycloak/lib/quarkus/
 ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start"]
