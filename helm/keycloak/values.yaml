@@ -94,7 +94,7 @@ db:
   rbac:
     create: true
   serviceAccount:
-    enabled: true
+    create: true
   metrics:
     enabled: true
     serviceMonitor:

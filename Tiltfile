@@ -19,5 +19,10 @@ k8s_yaml(
     )
 )
 
+local_resource('helm lint',
+               'docker run --rm -t -v $PWD:/app registry.gitlab.com/xdev-tech/build/helm:2.1' +
+               ' lint helm/keycloak --values helm/keycloak/values-dev.yaml',
+               'helm/keycloak/', allow_parallel=True)
+
 if config.tilt_subcommand == 'down' and not cfg.get("no-volumes"):
-  local('kubectl --context ' + k8s_context() + ' delete pvc --selector=app.kubernetes.io/instance=keycloak --wait=false')
+    local('kubectl --context ' + k8s_context() + ' delete pvc --selector=app.kubernetes.io/instance=keycloak --wait=false')
