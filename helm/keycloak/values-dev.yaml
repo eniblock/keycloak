@@ -6,3 +6,10 @@ metrics:
   enabled: true
 global:
   dev: true
+configurator:
+  realm_id: foo
+  array:
+    - foo
+    - bar
+  map:
+    foo: bar

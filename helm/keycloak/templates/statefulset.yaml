@@ -68,6 +68,9 @@ spec:
               value: {{ .Values.db.primary.service.ports.postgresql | quote }}
             - name: KC_DB_URL_DATABASE
               value: {{ .Values.db.auth.database }}
+          envFrom:
+            - secretRef:
+                name: {{ include "keycloak.fullname" . }}-configurator
           ports:
             - name: http
               containerPort: 8080

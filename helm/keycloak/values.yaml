@@ -66,6 +66,12 @@ ingress:
         matchLabels:
           name: ingress
 
+# variables to pass to the configurator as environment variables
+# the key is prefixed with TF_VAR_ in order to be understood as
+# a var value by terraform
+configurator:
+  # realm_id: foo
+
 ## activate metric collection through prometheus ServiceMonitor resources
 metrics:
   enabled: false
