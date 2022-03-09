@@ -24,5 +24,6 @@ configurator:
         client_secret       = var.backend_secret
       }
       variable "backend_secret" {
-        type = string
+        type      = string
+        sensitive = true
       }
