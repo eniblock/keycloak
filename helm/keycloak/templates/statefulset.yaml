@@ -71,6 +71,9 @@ spec:
           envFrom:
             - secretRef:
                 name: {{ include "keycloak.fullname" . }}-configurator
+          volumeMounts:
+            - name: configurator-files
+              mountPath: /tf/files
           ports:
             - name: http
               containerPort: 8080
@@ -86,6 +89,10 @@ spec:
             failureThreshold: 6
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: configurator-files
+          configMap:
+            name: {{ include "keycloak.fullname" . }}-configurator
       {{- with .Values.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}

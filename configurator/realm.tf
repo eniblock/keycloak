@@ -25,7 +25,7 @@ variable "smtp_password" {
   sensitive = true
 }
 
-resource "keycloak_realm" "test" {
+resource "keycloak_realm" "main" {
   realm   = var.realm_id
   enabled = true
 

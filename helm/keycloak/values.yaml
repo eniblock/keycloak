@@ -74,6 +74,10 @@ configurator:
   secrets: {}
     # realm_id: foo
 
+  # some files to add to the terraform configuration
+  files: {}
+
+
 ## activate metric collection through prometheus ServiceMonitor resources
 metrics:
   enabled: false
