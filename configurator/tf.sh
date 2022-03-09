@@ -14,4 +14,4 @@ terraform init -no-color --backend-config="conn_str=postgres://$KC_DB_USERNAME:$
 dockerize -timeout 60s -wait http://localhost:8080/auth/health
 export TF_VAR_admin_username=$KEYCLOAK_ADMIN
 export TF_VAR_admin_password=$KEYCLOAK_ADMIN_PASSWORD
-terraform apply -no-color --auto-approve
+terraform apply -no-color --auto-approve -lock-timeout=60s
