@@ -7,9 +7,10 @@ metrics:
 global:
   dev: true
 configurator:
-  realm_id: foo
-  array:
-    - foo
-    - bar
-  map:
-    foo: bar
+  secrets:
+    realm_id: foo
+    array:
+      - foo
+      - bar
+    map:
+      foo: bar
