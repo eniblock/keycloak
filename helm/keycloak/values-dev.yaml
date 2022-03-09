@@ -16,7 +16,7 @@ configurator:
       foo: bar
   files:
     client.tf: |-
-      resource "keycloak_openid_client" "openid_client" {
+      resource "keycloak_openid_client" "backend" {
         realm_id            = keycloak_realm.main.id
         client_id           = "backend"
         access_type         = "CONFIDENTIAL"
