@@ -1,6 +1,7 @@
 resource "keycloak_realm" "main" {
-  realm   = var.realm_id
-  enabled = true
+  realm             = var.realm_id
+  display_name      = var.realm_display == null ? var.realm_id : var.realm_display
+  display_name_html = var.realm_display_html == null ? (var.realm_display == null ? var.realm_id : var.realm_display) : var.realm_display_html
 
   smtp_server {
     host = var.smtp_host
@@ -8,8 +9,8 @@ resource "keycloak_realm" "main" {
     from = var.smtp_from
     ssl  = true
     auth {
-      username = "tom"
-      password = "tom"
+      username = var.smtp_username
+      password = var.smtp_password
     }
   }
 

@@ -24,7 +24,19 @@ provider "keycloak" {
 }
 variable "realm_id" {
   default     = "test"
-  description = "the realm name to use"
+  description = "the realm id to use"
+}
+
+variable "realm_display" {
+  default     = null
+  type        = string
+  description = "the realm name to display"
+}
+
+variable "realm_html_display" {
+  default     = null
+  type        = string
+  description = "the realm name to display in HTML"
 }
 
 # smtp configuration
