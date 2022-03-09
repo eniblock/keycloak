@@ -1,7 +1,8 @@
 stages:
   - prepare
   - test
-  - publish
+  - docker
+  - helm
 
 ci:
   stage: prepare
@@ -73,7 +74,7 @@ helm-lint:
     - lint helm/keycloak --values helm/keycloak/values-dev.yaml
 
 publish_docker:
-  stage: publish
+  stage: docker
   image:
     name: registry.gitlab.com/xdev-tech/build/docker:2.1
   script:
@@ -81,7 +82,7 @@ publish_docker:
     - build_with_pipeline_id $CI_REGISTRY_IMAGE
 
 publish_helm_oci:
-  stage: publish
+  stage: helm
   image: registry.gitlab.com/xdev-tech/build/helm:2.1
   script:
     - helm registry login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -89,7 +90,7 @@ publish_helm_oci:
     - build $CI_REGISTRY_IMAGE/helm/keycloak ./helm/keycloak
 
 publish_helm:
-  stage: publish
+  stage: helm
   image: registry.gitlab.com/xdev-tech/build/helm:2.1
   script:
     - helm registry login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
