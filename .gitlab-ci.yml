@@ -87,7 +87,7 @@ publish_helm_oci:
   script:
     - helm registry login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - helm dependency update ./helm/keycloak
-    - build $CI_REGISTRY_IMAGE/helm/keycloak ./helm/keycloak
+    - build $CI_REGISTRY_IMAGE/helm/keycloak ./helm/keycloak NO_PATCH
 
 publish_helm:
   stage: helm
@@ -95,4 +95,4 @@ publish_helm:
   script:
     - helm registry login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - helm dependency update ./helm/keycloak
-    - build_std ./helm/keycloak
+    - build_std ./helm/keycloak NO_PATCH
