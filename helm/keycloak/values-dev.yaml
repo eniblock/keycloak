@@ -9,6 +9,7 @@ global:
 configurator:
   secrets:
     realm_id: foo
+    backend_secret: e3a54938-29e7-4660-9838-76b576dd41d2
     array:
       - foo
       - bar
@@ -20,4 +21,8 @@ configurator:
         realm_id            = keycloak_realm.main.id
         client_id           = "backend"
         access_type         = "CONFIDENTIAL"
+        client_secret       = var.backend_secret
+      }
+      variable "backend_secret" {
+        type = string
       }
