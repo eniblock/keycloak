@@ -75,7 +75,10 @@ configurator:
     # realm_id: foo
 
   # some files to add to the terraform configuration
+  # a default configuration is available in default.tf and may be
+  # overriden here
   files: {}
+    # default.tf: ""
 
 
 ## activate metric collection through prometheus ServiceMonitor resources
