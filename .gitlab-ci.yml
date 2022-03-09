@@ -79,7 +79,7 @@ publish_docker:
     name: registry.gitlab.com/xdev-tech/build/docker:2.1
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - build_with_pipeline_id $CI_REGISTRY_IMAGE
+    - build_with_helm_tag $CI_REGISTRY_IMAGE helm/keycloak
 
 publish_helm_oci:
   stage: helm
