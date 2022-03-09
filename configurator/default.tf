@@ -1,7 +1,7 @@
 resource "keycloak_realm" "main" {
   realm             = var.realm_id
   display_name      = var.realm_display == null ? var.realm_id : var.realm_display
-  display_name_html = var.realm_display_html == null ? (var.realm_display == null ? var.realm_id : var.realm_display) : var.realm_display_html
+  display_name_html = var.realm_html_display == null ? (var.realm_display == null ? var.realm_id : var.realm_display) : var.realm_html_display
 
   smtp_server {
     host = var.smtp_host
