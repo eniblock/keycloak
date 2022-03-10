@@ -7,7 +7,7 @@ stages:
 ci:
   stage: prepare
   image:
-    name: registry.gitlab.com/xdev-tech/build/docker:2.1
+    name: registry.gitlab.com/xdev-tech/build/docker:2.3
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
@@ -67,7 +67,7 @@ sonarcloud-check:
 
 helm-lint:
   stage: test
-  image: registry.gitlab.com/xdev-tech/build/helm:2.1
+  image: registry.gitlab.com/xdev-tech/build/helm:2.3
   allow_failure: true
   script:
     - helm dependency update ./helm/keycloak
@@ -76,14 +76,14 @@ helm-lint:
 publish_docker:
   stage: docker
   image:
-    name: registry.gitlab.com/xdev-tech/build/docker:2.1
+    name: registry.gitlab.com/xdev-tech/build/docker:2.3
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - build_with_helm_tag $CI_REGISTRY_IMAGE helm/keycloak
 
 publish_helm_oci:
   stage: helm
-  image: registry.gitlab.com/xdev-tech/build/helm:develop
+  image: registry.gitlab.com/xdev-tech/build/helm:2.3
   script:
     - helm registry login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - helm dependency update ./helm/keycloak
@@ -91,7 +91,7 @@ publish_helm_oci:
 
 publish_helm:
   stage: helm
-  image: registry.gitlab.com/xdev-tech/build/helm:develop
+  image: registry.gitlab.com/xdev-tech/build/helm:2.3
   script:
     - helm registry login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - helm dependency update ./helm/keycloak
