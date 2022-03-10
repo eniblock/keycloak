@@ -79,6 +79,10 @@ spec:
             - secretRef:
                 name: {{ tpl $v $ }}
             {{- end }}
+            {{- range $v := .Values.extraEnvFromExistingConfigMaps }}
+            - configMapRef:
+                name: {{ tpl $v $ }}
+            {{- end }}
           volumeMounts:
             - name: configurator-files
               mountPath: /tf/files
