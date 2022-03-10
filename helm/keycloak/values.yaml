@@ -17,6 +17,9 @@ image:
 adminUser: kcadmin
 # adminPassword:
 
+# extra environment variables to pass to the container
+extraEnv: {}
+
 ## keycloak service configuration
 service:
   type: ClusterIP

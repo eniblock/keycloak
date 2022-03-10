@@ -68,6 +68,10 @@ spec:
               value: {{ .Values.db.primary.service.ports.postgresql | quote }}
             - name: KC_DB_URL_DATABASE
               value: {{ .Values.db.auth.database }}
+            {{- range $k, $v := .Values.extraEnv }}
+            - name: {{ $k | quote }}
+              value: {{ $v | quote }}
+            {{- end }}
           envFrom:
             - secretRef:
                 name: {{ include "keycloak.fullname" . }}-configurator
