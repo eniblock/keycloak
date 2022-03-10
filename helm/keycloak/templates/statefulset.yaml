@@ -75,6 +75,10 @@ spec:
           envFrom:
             - secretRef:
                 name: {{ include "keycloak.fullname" . }}-configurator
+            {{- range $v := .Values.extraEnvFromExistingSecrets }}
+            - secretRef:
+                name: {{ tpl $v $ }}
+            {{- end }}
           volumeMounts:
             - name: configurator-files
               mountPath: /tf/files

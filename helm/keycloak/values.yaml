@@ -20,6 +20,9 @@ adminUser: kcadmin
 # extra environment variables to pass to the container
 extraEnv: {}
 
+# use existing secrets for environment variables
+extraEnvFromExistingSecrets: []
+
 ## keycloak service configuration
 service:
   type: ClusterIP
