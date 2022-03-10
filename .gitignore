@@ -1,3 +1,4 @@
+*~
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
@@ -36,3 +37,4 @@ build/
 ### Tilt ###
 .helm
 tilt_modules
+helm/keycloak/charts
