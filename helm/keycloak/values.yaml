@@ -80,8 +80,14 @@ configurator:
   # variables to pass to the configurator as environment variables
   # the key is prefixed with TF_VAR_ in order to be understood as
   # a var value by terraform
-  secrets: {}
+  variables: {}
     # realm_id: foo
+
+  # secrets to pass to the configurator as environment variables
+  # the key is prefixed with TF_VAR_ in order to be understood as
+  # a var value by terraform
+  secrets: {}
+    # smpt_password: ultrasecure
 
   # some files to add to the terraform configuration
   # a default configuration is available in default.tf and may be

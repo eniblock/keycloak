@@ -7,14 +7,15 @@ metrics:
 global:
   dev: true
 configurator:
-  secrets:
+  variables:
     realm_id: foo
-    backend_secret: e3a54938-29e7-4660-9838-76b576dd41d2
     array:
       - foo
       - bar
     map:
       foo: bar
+  secrets:
+    backend_secret: e3a54938-29e7-4660-9838-76b576dd41d2
   files:
     client.tf: |-
       resource "keycloak_openid_client" "backend" {

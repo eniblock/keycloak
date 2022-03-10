@@ -68,6 +68,15 @@ spec:
               value: {{ .Values.db.primary.service.ports.postgresql | quote }}
             - name: KC_DB_URL_DATABASE
               value: {{ .Values.db.auth.database }}
+            {{- range $k, $v := .Values.configurator.variables }}
+            {{- if or (kindIs "map" $v) (kindIs "slice" $v) }}
+            - name: TF_VAR_{{ $k }}
+              value: {{ $v | toJson | quote }}
+            {{- else }}
+            - name: TF_VAR_{{ $k }}
+              value: {{ $v | quote }}
+            {{- end }}
+            {{- end }}
             {{- range $k, $v := .Values.extraEnv }}
             - name: {{ $k | quote }}
               value: {{ $v | quote }}
