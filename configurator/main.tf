@@ -52,6 +52,10 @@ variable "smtp_from" {
   default = "Test"
 }
 
+variable "smtp_ssl" {
+  default = true
+}
+
 variable "smtp_username" {
   default = ""
 }
