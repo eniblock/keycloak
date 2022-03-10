@@ -8,9 +8,12 @@ resource "keycloak_realm" "main" {
     port = var.smtp_port
     from = var.smtp_from
     ssl  = true
-    auth {
-      username = var.smtp_username
-      password = var.smtp_password
+    dynamic "auth" {
+      for_each = var.smtp_username == ""? []: [1]
+      content {
+        username = var.smtp_username
+        password = var.smtp_password
+      }
     }
   }
 
