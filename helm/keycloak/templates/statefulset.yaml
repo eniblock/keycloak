@@ -105,7 +105,7 @@ spec:
               # a first run
               ./tf.sh
               # and update when there is a change
-              exec reflex -v ./tf.sh
+              exec reflex ./tf.sh
           env:
             - name: KEYCLOAK_ADMIN_PASSWORD
               valueFrom:
