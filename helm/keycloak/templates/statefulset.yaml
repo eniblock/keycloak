@@ -6,8 +6,8 @@ metadata:
   labels:
     {{- include "keycloak.labels" . | nindent 4 }}
     app.kubernetes.io/component: keycloak
-  annotations:
-    reloader.stakater.com/auto: "true"
+  # annotations:
+  #   reloader.stakater.com/auto: "true"
 spec:
   replicas: {{ .Values.replicas }}
   serviceName: {{ include "keycloak.fullname" . }}-headless
@@ -28,17 +28,11 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.Version }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
-            - dockerize
-          args:
-            - -stdout=/tmp/configurator.out
             - /opt/keycloak/bin/kc.sh
+          args:
             - start
             - -Djgroups.dns.query=keycloak-headless.{{ .Release.Namespace }}.svc.cluster.local
             - --proxy=edge
-          lifecycle:
-            postStart:
-              exec:
-                command: ["sh", "-c", "/tf/tf.sh 2>&1 > /tmp/configurator.out"]
           env:
             {{- if .Values.ingress.host }}
             - name: KC_HOSTNAME
@@ -56,6 +50,73 @@ spec:
                   key: password
             # - name: KEYCLOAK_CREATE_ADMIN_USER
             #   value: "true"
+            - name: KEYCLOAK_ADMIN
+              value: {{ .Values.adminUser }}
+            - name: KC_DB_URL
+              value: jdbc:postgresql://{{ include "keycloak.db.fullname" . }}:{{ .Values.db.primary.service.ports.postgresql }}/{{ .Values.db.auth.database }}
+            - name: KC_DB_USERNAME
+              value: {{ .Values.db.auth.username }}
+            - name: KC_DB_URL_HOST
+              value: {{ include "keycloak.db.fullname" . }}
+            - name: KC_DB_URL_PORT
+              value: {{ .Values.db.primary.service.ports.postgresql | quote }}
+            - name: KC_DB_URL_DATABASE
+              value: {{ .Values.db.auth.database }}
+            {{- range $k, $v := .Values.extraEnv }}
+            - name: {{ $k | quote }}
+              value: {{ $v | quote }}
+            {{- end }}
+          envFrom:
+            - secretRef:
+                name: {{ include "keycloak.fullname" . }}-configurator
+            {{- range $v := .Values.extraEnvFromExistingSecrets }}
+            - secretRef:
+                name: {{ tpl $v $ }}
+            {{- end }}
+            {{- range $v := .Values.extraEnvFromExistingConfigMaps }}
+            - configMapRef:
+                name: {{ tpl $v $ }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /auth/health
+              port: http
+          startupProbe:
+            httpGet:
+              path: /auth/health
+              port: http
+            failureThreshold: 6
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+        - name: configurator
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.Version }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - bash
+          args:
+            - -c
+            - |-
+              set -e
+              cd /tf
+              # a first run
+              ./tf.sh
+              # and update when there is a change
+              exec reflex -v ./tf.sh
+          env:
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "keycloak.fullname" . }}
+                  key: admin-password
+            - name: KC_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "keycloak.db.fullname" . }}
+                  key: password
             - name: KEYCLOAK_ADMIN
               value: {{ .Values.adminUser }}
             - name: KC_DB_URL
@@ -95,21 +156,6 @@ spec:
           volumeMounts:
             - name: configurator-files
               mountPath: /tf/files
-          ports:
-            - name: http
-              containerPort: 8080
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /auth/health
-              port: http
-          startupProbe:
-            httpGet:
-              path: /auth/health
-              port: http
-            failureThreshold: 6
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
       volumes:
         - name: configurator-files
           configMap:
