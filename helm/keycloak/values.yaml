@@ -66,6 +66,7 @@ ingress:
   # host name to use for all the ingresses
   # host:
   annotations:
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "8k"
     kubernetes.io/tls-acme: "true"
   # tls secret name for all the ingresses
   # secretName:
