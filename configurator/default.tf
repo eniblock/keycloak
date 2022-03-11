@@ -20,11 +20,8 @@ resource "keycloak_realm" "main" {
   login_theme = "extra"
 
   internationalization {
-    supported_locales = [
-      "en",
-      "fr",
-    ]
-    default_locale = "en"
+    supported_locales = var.locales
+    default_locale = var.locales[0]
   }
 
   security_defenses {

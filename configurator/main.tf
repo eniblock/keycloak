@@ -64,3 +64,7 @@ variable "smtp_password" {
   default   = ""
   sensitive = true
 }
+
+variable "locales" {
+  default = ["en"]
+}
