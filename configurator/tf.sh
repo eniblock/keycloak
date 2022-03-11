@@ -7,6 +7,13 @@ set -e
 cd /tf
 d=`mktemp -d`
 
+echo update > /tmp/configurator.status
+
+function error_status() {
+    echo error > /tmp/configurator.status
+}
+trap error_status EXIT
+
 # copy the file in a tempdir, so we don't have to touch the files
 cp -a /tf/ $d/
 
@@ -27,5 +34,9 @@ terraform apply -no-color --auto-approve -lock-timeout=60s
 
 cd /tf
 rm -rf $d
+
+echo ok > /tmp/configurator.status
+touch /tmp/configurator.done
+trap - EXIT
 
 echo

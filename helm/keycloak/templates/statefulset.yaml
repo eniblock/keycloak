@@ -153,6 +153,17 @@ spec:
             - configMapRef:
                 name: {{ tpl $v $ }}
             {{- end }}
+          livenessProbe:
+            exec:
+              command:
+                - ls
+                - /tmp/configurator.done
+          readinessProbe:
+            exec:
+              command:
+                - grep
+                - ok
+                - /tmp/configurator.status
           volumeMounts:
             - name: configurator-files
               mountPath: /tf/files
