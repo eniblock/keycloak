@@ -22,8 +22,8 @@ k8s_yaml(
 k8s_resource('keycloak', port_forwards=['8080:8080'])
 k8s_resource('keycloak-keycloak-db', port_forwards=['5432:5432'])
 local_resource('helm lint',
-               'docker run --rm -t -v $PWD:/app registry.gitlab.com/xdev-tech/build/helm:2.3' +
-               ' lint helm/keycloak --values helm/keycloak/values-dev.yaml',
+               'docker run --rm -t -v $PWD:/app registry.gitlab.com/xdev-tech/build/helm:3.0' +
+               ' lint keycloak helm/keycloak --values helm/keycloak/values-dev.yaml',
                'helm/keycloak/', allow_parallel=True)
 
 if config.tilt_subcommand == 'down' and not cfg.get("no-volumes"):
