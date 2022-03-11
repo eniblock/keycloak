@@ -167,6 +167,8 @@ spec:
           volumeMounts:
             - name: configurator-files
               mountPath: /tf/files
+          resources:
+            {{- toYaml .Values.configurator.resources | nindent 12 }}
       volumes:
         - name: configurator-files
           configMap:

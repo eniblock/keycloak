@@ -96,6 +96,11 @@ configurator:
   files: {}
     # default.tf: ""
 
+  # configurator resources
+  resources:
+    requests:
+      memory: 50Mi
+      cpu: 1m
 
 ## activate metric collection through prometheus ServiceMonitor resources
 metrics:
