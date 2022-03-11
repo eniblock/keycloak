@@ -9,7 +9,11 @@ if config.tilt_subcommand == 'up':
     local(clk_k8s + 'add-domain kc.localhost')
     local(clk_k8s + 'helm-dependency-update helm/keycloak')
 
-docker_build("registry.gitlab.com/xdev-tech/xdev-enterprise-business-network/keycloak", ".")
+docker_build("registry.gitlab.com/xdev-tech/xdev-enterprise-business-network/keycloak", ".",
+    live_update=[
+        sync('configurator/', '/tf/'),
+    ]
+)
 
 k8s_yaml(
     helm(
