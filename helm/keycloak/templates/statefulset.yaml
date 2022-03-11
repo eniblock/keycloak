@@ -6,8 +6,8 @@ metadata:
   labels:
     {{- include "keycloak.labels" . | nindent 4 }}
     app.kubernetes.io/component: keycloak
-  # annotations:
-  #   reloader.stakater.com/auto: "true"
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   replicas: {{ .Values.replicas }}
   serviceName: {{ include "keycloak.fullname" . }}-headless
