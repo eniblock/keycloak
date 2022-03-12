@@ -33,6 +33,9 @@ spec:
             - start
             - -Djgroups.dns.query=keycloak-headless.{{ .Release.Namespace }}.svc.cluster.local
             - --proxy=edge
+            {{- range $v := .Values.extraArgs }}
+            - {{ $v | quote }}
+            {{- end }}
           env:
             {{- if .Values.ingress.host }}
             - name: KC_HOSTNAME

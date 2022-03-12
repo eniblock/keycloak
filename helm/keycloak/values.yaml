@@ -20,6 +20,9 @@ adminUser: kcadmin
 # extra environment variables to pass to the container
 extraEnv: {}
 
+# extra arguments to pass on the command line
+extraArgs: []
+
 # use existing secrets for environment variables
 extraEnvFromExistingSecrets: []
 

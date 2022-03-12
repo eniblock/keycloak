@@ -12,6 +12,7 @@ if config.tilt_subcommand == 'up':
 docker_build("registry.gitlab.com/xdev-tech/xdev-enterprise-business-network/keycloak", ".",
     live_update=[
         sync('configurator/', '/tf/'),
+        sync('theme/', '/opt/keycloak/themes/extra/'),
     ]
 )
 
