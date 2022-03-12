@@ -6,10 +6,6 @@ metrics:
   enabled: true
 global:
   dev: true
-extraArgs:
-  - --spi-theme-static-max-age=-1
-  - --spi-theme-cache-themes=false
-  - --spi-theme-cache-templates=false
 configurator:
   variables:
     realm_id: foo

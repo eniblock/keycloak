@@ -33,6 +33,11 @@ spec:
             - start
             - -Djgroups.dns.query=keycloak-headless.{{ .Release.Namespace }}.svc.cluster.local
             - --proxy=edge
+            {{ if .Values.global.dev }}
+            - --spi-theme-static-max-age=-1
+            - --spi-theme-cache-themes=false
+            - --spi-theme-cache-templates=false
+            {{- end }}
             {{- range $v := .Values.extraArgs }}
             - {{ $v | quote }}
             {{- end }}
