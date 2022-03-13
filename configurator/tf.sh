@@ -1,18 +1,16 @@
 #!/bin/sh
 
-echo
-
 set -e
 
-cd /tf
-d=`mktemp -d`
-
-echo update > /tmp/configurator.status
+echo
 
 function error_status() {
     echo error > /tmp/configurator.status
 }
 trap error_status EXIT
+
+cd /tf
+d=`mktemp -d`
 
 # copy the file in a tempdir, so we don't have to touch the files
 cp -a /tf/ $d/
@@ -36,7 +34,7 @@ cd /tf
 rm -rf $d
 
 echo ok > /tmp/configurator.status
-touch /tmp/configurator.done
+
 trap - EXIT
 
 echo

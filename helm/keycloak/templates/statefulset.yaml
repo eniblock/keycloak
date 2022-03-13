@@ -165,7 +165,7 @@ spec:
             exec:
               command:
                 - ls
-                - /tmp/configurator.done
+                - /tmp/configurator.status
           readinessProbe:
             exec:
               command:
