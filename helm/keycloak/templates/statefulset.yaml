@@ -23,6 +23,7 @@ spec:
         {{ include "keycloak.db.fullname" . }}-client: "true"
     spec:
       serviceAccountName: {{ include "keycloak.serviceAccountName" . }}
+      {{- include "keycloak.imagePullSecrets" . | nindent 6 }}
       containers:
         - name: keycloak
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.Version }}"
