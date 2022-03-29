@@ -48,8 +48,8 @@ image:
   registry: registry.gitlab.com
   repository: xdev-tech/xdev-enterprise-business-network/keycloak
   tag: 0.2.0
-  pullSecrets:
-    - gitlab-registry
+  imagePullSecrets:
+    - name: gitlab-registry
 ~~~
 
 make sure the pull secret is configured with a gitlab access token with the `read_registry` scope
