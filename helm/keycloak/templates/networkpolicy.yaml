@@ -22,5 +22,7 @@ spec:
             matchLabels:
               {{- include "keycloak.selectorLabels" . | nindent 14 }}
               app.kubernetes.io/component: keycloak
+        {{- if .Values.ingress.enabled }}
         {{- .Values.ingress.from | toYaml | nindent 8 }}
+        {{- end }}
 {{- end }}
