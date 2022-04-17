@@ -79,8 +79,6 @@ spec:
               value: {{ $v | quote }}
             {{- end }}
           envFrom:
-            - secretRef:
-                name: {{ include "keycloak.fullname" . }}-configurator
             {{- range $v := .Values.extraEnvFromExistingSecrets }}
             - secretRef:
                 name: {{ tpl $v $ }}
