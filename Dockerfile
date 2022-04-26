@@ -1,7 +1,7 @@
 FROM alpine as reflex-downloader
 RUN wget -O - https://github.com/cespare/reflex/releases/download/v0.3.1/reflex_linux_amd64.tar.gz | tar xvzC /usr/bin --strip-components=1 reflex_linux_amd64/reflex
 
-FROM quay.io/keycloak/keycloak:17.0.0 as builder
+FROM quay.io/keycloak/keycloak:18.0.0 as builder
 RUN /opt/keycloak/bin/kc.sh build \
   --metrics-enabled=true \
   --db=postgres \
