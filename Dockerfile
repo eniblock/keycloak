@@ -8,7 +8,7 @@ RUN /opt/keycloak/bin/kc.sh build \
   --cache-stack=kubernetes \
   --http-relative-path=auth
 
-FROM quay.io/keycloak/keycloak:17.0.0
+FROM quay.io/keycloak/keycloak:18.0.0
 USER root
 RUN curl -sSL https://github.com/powerman/dockerize/releases/download/v0.16.0/dockerize-linux-x86_64 > /usr/bin/dockerize \
   && chmod a+x /usr/bin/dockerize
