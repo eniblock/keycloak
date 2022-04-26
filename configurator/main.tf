@@ -49,7 +49,7 @@ variable "smtp_port" {
 }
 
 variable "smtp_from" {
-  default = "Test"
+  default = "noreply@eniblock.fr"
 }
 
 variable "smtp_ssl" {
