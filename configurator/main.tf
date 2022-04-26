@@ -66,5 +66,6 @@ variable "smtp_password" {
 }
 
 variable "locales" {
+  type    = list(string)
   default = ["en"]
 }
