@@ -3,6 +3,7 @@ RUN wget -O - https://github.com/cespare/reflex/releases/download/v0.3.1/reflex_
 
 FROM quay.io/keycloak/keycloak:18.0.0 as builder
 RUN /opt/keycloak/bin/kc.sh build \
+  --health-enabled=true \
   --metrics-enabled=true \
   --db=postgres \
   --cache-stack=kubernetes \
