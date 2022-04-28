@@ -45,7 +45,7 @@ variable "smtp_host" {
 }
 
 variable "smtp_port" {
-  default = "587"
+  default = "465"
 }
 
 variable "smtp_from" {
