@@ -37,7 +37,7 @@ spec:
             - start
             - -Djgroups.dns.query=keycloak-headless.{{ .Release.Namespace }}.svc.cluster.local
             - --proxy=edge
-            {{ if .Values.global.dev }}
+            {{- if .Values.global.dev }}
             - --spi-theme-static-max-age=-1
             - --spi-theme-cache-themes=false
             - --spi-theme-cache-templates=false
@@ -111,12 +111,19 @@ spec:
             - -c
             - |-
               set -e
+              {{- if .Values.global.dev }}
+              set -x
+              {{- end }}
               cd /tf
               # a first run
               ./tf.sh
               # and update when there is a change
               exec reflex ./tf.sh
           env:
+            {{- if .Values.global.dev }}
+            - name: DEBUG
+              value: "true"
+            {{- end }}
             - name: KEYCLOAK_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
