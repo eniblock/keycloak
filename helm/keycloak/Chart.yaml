@@ -8,7 +8,7 @@ keywords:
   - access-management
 type: application
 version: 0.2.0
-appVersion: "18.0.0"
+appVersion: "18.0.2"
 dependencies:
   - condition: postgresql.enabled
     alias: db

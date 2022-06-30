@@ -1,7 +1,7 @@
 FROM alpine as reflex-downloader
 RUN wget -O - https://github.com/cespare/reflex/releases/download/v0.3.1/reflex_linux_amd64.tar.gz | tar xvzC /usr/bin --strip-components=1 reflex_linux_amd64/reflex
 
-FROM quay.io/keycloak/keycloak:18.0.0 as builder
+FROM quay.io/keycloak/keycloak:18.0.2 as builder
 RUN /opt/keycloak/bin/kc.sh build \
   --health-enabled=true \
   --metrics-enabled=true \
@@ -9,7 +9,7 @@ RUN /opt/keycloak/bin/kc.sh build \
   --cache-stack=kubernetes \
   --http-relative-path=auth
 
-FROM quay.io/keycloak/keycloak:18.0.0
+FROM quay.io/keycloak/keycloak:18.0.2
 USER root
 RUN curl -sSL https://github.com/powerman/dockerize/releases/download/v0.16.0/dockerize-linux-x86_64 > /usr/bin/dockerize \
   && chmod a+x /usr/bin/dockerize
