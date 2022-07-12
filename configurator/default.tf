@@ -30,6 +30,8 @@ resource "keycloak_realm" "main" {
     }
   }
 
+  reset_password_allowed = var.reset_password_allowed
+
   #   password_policy = "upperCase(1) and length(8) and forceExpiredPasswordChange(365) and notUsername"
 }
 

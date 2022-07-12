@@ -69,3 +69,7 @@ variable "locales" {
   type    = list(string)
   default = ["en"]
 }
+
+variable "reset_password_allowed" {
+  default = false
+}
