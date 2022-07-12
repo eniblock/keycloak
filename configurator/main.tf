@@ -73,3 +73,8 @@ variable "locales" {
 variable "reset_password_allowed" {
   default = false
 }
+
+variable "valid_redirect_uris" {
+  type    = list(string)
+  default = ["/*"]
+}

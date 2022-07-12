@@ -9,7 +9,7 @@ resource "keycloak_realm" "main" {
     from = var.smtp_from
     ssl  = var.smtp_ssl
     dynamic "auth" {
-      for_each = var.smtp_username == ""? []: [1]
+      for_each = var.smtp_username == "" ? [] : [1]
       content {
         username = var.smtp_username
         password = var.smtp_password
@@ -21,7 +21,7 @@ resource "keycloak_realm" "main" {
 
   internationalization {
     supported_locales = var.locales
-    default_locale = var.locales[0]
+    default_locale    = var.locales[0]
   }
 
   security_defenses {
@@ -41,5 +41,6 @@ resource "keycloak_openid_client" "frontend" {
   access_type                  = "PUBLIC"
   standard_flow_enabled        = true
   direct_access_grants_enabled = true
-  valid_redirect_uris          = ["*"]
+  valid_redirect_uris          = var.valid_redirect_uris
+  web_origins                  = ["+"]
 }

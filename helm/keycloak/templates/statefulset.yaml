@@ -146,6 +146,10 @@ spec:
               value: {{ .Values.db.primary.service.ports.postgresql | quote }}
             - name: KC_DB_URL_DATABASE
               value: {{ .Values.db.auth.database }}
+            {{- if and .Values.ingress.enabled (not .Values.configurator.variables.valid_redirect_uris) }}
+            - name: TF_VAR_valid_redirect_uris
+              value: '["https://{{ .Values.ingress.host }}/*"]'
+            {{- end }}
             {{- range $k, $v := .Values.configurator.variables }}
             {{- if or (kindIs "map" $v) (kindIs "slice" $v) }}
             - name: TF_VAR_{{ $k }}
