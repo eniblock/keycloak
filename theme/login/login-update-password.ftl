@@ -59,9 +59,9 @@
                     </div>
                 </div>
 
-                <div id="kc-form-buttons" class="${properties.kcFormButtonsClass!} col-xs-6 col-sm-4">
+                <div id="kc-form-buttons" class="${properties.kcFormButtonsClass! col-xs-6 col-sm-4" >
                     <button class="mdc-button mdc-button--raised mdc-login-button ${properties.kcButtonClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonLargeClass!}"
-                            type="submit">
+                            type="submit" style="background-color:${properties.kcCssSignColor!} !important;">
                         ${msg("doSubmit")}
                     </button>
                 </div>
