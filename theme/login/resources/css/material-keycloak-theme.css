@@ -94,7 +94,7 @@ h5 {
 }
 
 .kc-logo {
-    max-width: calc(100% - 10px);
+    max-width: 360px;
 }
 
 #kc-content {
