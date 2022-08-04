@@ -11,11 +11,10 @@
                     <div class="${properties.kcInputWrapperClass!}">
                         <div class="mdc-text-field mdc-text-field--filled ${properties.kcLabelClass!}">
                             <input id="email_code" class="mdc-text-field__input ${properties.kcInputClass!}"
-                                   name="email_code" value="" type="text" autocomplete="off"
-                                   placeholder="Please enter the code received by email">
+                                   name="email_code" value="" type="text" autocomplete="off">
                             <div class="${properties.kcLabelWrapperClass!}">
                                 <label for="email_code" class="mdc-floating-label mdc-floating-label--float-above ${properties.kcLabelClass!}">
-                                    Code
+                                    ${msg("codeLabel")}
                                 </label>
                             </div>
                         </div>

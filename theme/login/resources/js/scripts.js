@@ -8,10 +8,6 @@ function show(pwd_id) {
     }
 }
 
-function goToForgotPassword() {
-    window.location.replace('/pages/auth/forgot-password');
-}
-
 function goToRegistration() {
-    window.location.replace('/pages/auth/register');
+    window.location.replace('/register');
 }

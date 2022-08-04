@@ -1,5 +1,5 @@
 <#import "template.ftl" as layout>
-<@layout.registrationLayout displayInfo=social.displayInfo; section>
+<@layout.registrationLayout displayInfo=true; section>
 
     <div id="kc-form-login-container">
         <#if section = "form">
@@ -16,13 +16,7 @@
                                 <div class="${properties.kcLabelWrapperClass!}">
                                     <label for="username"
                                            class="mdc-floating-label ${properties.kcLabelClass!}">
-                                        <#if !realm.loginWithEmailAllowed>
-                                            ${msg("username")}
-                                        <#elseif !realm.registrationEmailAsUsername>
-                                            ${msg("usernameOrEmail")}
-                                        <#else>
-                                            ${msg("email")}
-                                        </#if>
+                                        ${msg("email")}
                                     </label>
                                 </div>
                             </div>
@@ -54,7 +48,7 @@
 
                     <div class="${properties.kcFormGroupClass!}">
                         <div id="kc-form-options" class="${properties.kcFormOptionsClass!}">
-                            <div class="col-xs-7">
+                            <div id="rememberMeContainer" class="col-xs-7">
                                 <#if realm.rememberMe && !usernameEditDisabled??>
 
                                     <div class="mdc-form-field remember-me-checkbox">
@@ -105,10 +99,10 @@
                 </div>
             </#if>
 
-            <#if realm.password && realm.registrationAllowed && !usernameEditDisabled??>
+            <#if realm.password && realm.registrationAllowed && client.clientId == '${properties.clientId}'>
                 <div id="footer-container" class="footer-container-${properties.kcCssColor!}">
                     <div id="kc-footer-button">
-                        <a href="${url.registrationUrl}">
+                        <a onclick="goToRegistration();return false;">
                             ${msg("goToRegister")}
                         </a>
                     </div>
