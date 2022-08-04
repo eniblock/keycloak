@@ -152,10 +152,10 @@ h5 {
     border-width: 1px;
     border-style: solid;
     border-radius: 4px;
-    border-bottom-color: transparent !important;
-    border-left-color: transparent;
-    border-right-color: transparent;
-    border-top-color: transparent;
+    border-bottom-color: #92929d !important;
+    border-left-color: #92929d;
+    border-right-color: #92929d;
+    border-top-color: #92929d;
 }
 
 .kc-content-black .mdc-text-field {
