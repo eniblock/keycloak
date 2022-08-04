@@ -30,7 +30,7 @@ h5 {
 }
 
 .kc-container-white {
-    background: #14142b url("../img/background-white.png") no-repeat fixed center center;
+    background: #14142b url("../img/background.jpg") no-repeat fixed center center;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -38,7 +38,7 @@ h5 {
 }
 
 .kc-container-black {
-    background: #14142b url("../img/background.png") no-repeat fixed center center;
+    background: #14142b url("../img/background.jpg") no-repeat fixed center center;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
