@@ -19,6 +19,8 @@ resource "keycloak_realm" "main" {
 
   login_theme = "extra"
 
+  access_token_lifespan = var.access_token_lifespan
+
   internationalization {
     supported_locales = var.locales
     default_locale    = var.locales[0]

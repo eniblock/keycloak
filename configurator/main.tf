@@ -78,3 +78,7 @@ variable "valid_redirect_uris" {
   type    = list(string)
   default = ["/*"]
 }
+
+variable "access_token_lifespan" {
+  default = "5m"
+}
