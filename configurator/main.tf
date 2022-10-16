@@ -21,6 +21,7 @@ provider "keycloak" {
   username  = var.admin_username
   password  = var.admin_password
   url       = "http://localhost:8080"
+  base_path = "/auth"
 }
 variable "realm_id" {
   default     = "test"
