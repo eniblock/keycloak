@@ -8,11 +8,22 @@ on:
 
 jobs:
 
+  ############################ tests ############################
+
+  lint-helm:
+    runs-on: [self-hosted]
+    steps:
+    - uses: eniblock/build/actions/setup@develop
+      id: setup
+      with:
+        dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}
+    - run: earthly ./helm+lint
+
   ############################ docker ############################
 
   docker:
     runs-on: [self-hosted]
-    needs: [test-frontend, lint-frontend, prettier-frontend, lint-helm]
+    needs: [lint-helm]
     steps:
     - uses: eniblock/build/actions/setup@develop
       id: setup
@@ -25,7 +36,7 @@ jobs:
 
   helm-publish:
     runs-on: [self-hosted]
-    needs: [docker-frontend, docker-iam-sita, docker-iam-ams]
+    needs: [docker]
     steps:
     - uses: eniblock/build/actions/setup@develop
       id: setup
