@@ -30,7 +30,7 @@ jobs:
       with:
         helmdir: helm/keycloak
         dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}
-    - run: earthly --secret github_token=${{ secrets.GITHUB_TOKEN }} ./frontend+docker --tag=${{ steps.setup.outputs.tag }}
+    - run: earthly +docker --tag=${{ steps.setup.outputs.tag }}
 
   ############################ helm ############################
 
