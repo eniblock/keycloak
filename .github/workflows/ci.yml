@@ -1,0 +1,40 @@
+name: ci
+on:
+  push:
+    branches:
+      - "**"
+    tags:
+      - "*"
+
+jobs:
+
+  ############################ docker ############################
+
+  docker:
+    runs-on: [self-hosted]
+    needs: [test-frontend, lint-frontend, prettier-frontend, lint-helm]
+    steps:
+    - uses: eniblock/build/actions/setup@develop
+      id: setup
+      with:
+        helmdir: helm/sita
+        dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}
+    - run: earthly --secret github_token=${{ secrets.GITHUB_TOKEN }} ./frontend+docker --tag=${{ steps.setup.outputs.tag }}
+
+  ############################ helm ############################
+
+  helm-publish:
+    runs-on: [self-hosted]
+    needs: [docker-frontend, docker-iam-sita, docker-iam-ams]
+    steps:
+    - uses: eniblock/build/actions/setup@develop
+      id: setup
+      with:
+        helmdir: helm/sita
+        dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Build/Publish the helm charts
+      run: |
+        earthly \
+          --secret registry_password=${{ github.token }} \
+          ./helm+publish \
+          --tag=${{ steps.setup.outputs.tag }}

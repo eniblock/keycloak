@@ -10,7 +10,7 @@ replicas: 1
 
 ## keycloak image configuration
 image:
-  repository: registry.gitlab.com/xdev-tech/xdev-enterprise-business-network/keycloak
+  repository: eniblock/keycloak
   pullPolicy: IfNotPresent
   # tag: 17.0:0
 
