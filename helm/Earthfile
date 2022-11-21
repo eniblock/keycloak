@@ -20,7 +20,7 @@ lint:
 build:
     FROM +deps
     ARG tag=0.1.0-local
-    DO helm+BUILD --helmdir=./keycloak --tag=${tag} --patch_values=.collaborate.keycloak.image.tag
+    DO helm+BUILD --helmdir=./keycloak --tag=${tag}
     SAVE ARTIFACT /app/*-${tag}.tgz
 
 save-package:
